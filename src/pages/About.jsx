@@ -1,13 +1,15 @@
-
 import Navbar from "../components/layout/Navbar/Navbar";
 import FullScreenBtn from "../components/layout/FullScreenBtn/FullScreenBtn";
 
-function English(){
+function About() {
     return (
         <>
             <Navbar />
+            <div className="bento-item fullscreen-area">
+            <FullScreenBtn/>
+            </div>
         </>
     );
-
 }
-export default English ;
+
+export default About;

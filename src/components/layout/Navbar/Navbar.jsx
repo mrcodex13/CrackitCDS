@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Routes ,Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "./Navbar.css";
+import Home from '../../../pages/Home';
+import About from '../../../pages/About';
 
 function Navbar() {
   const [isLight, setIsLight] = useState(false);
@@ -50,10 +54,10 @@ function Navbar() {
         </button>
 
         <ul className="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Login</a></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/About">About</Link></li>
+          <li><Link to="/contact">Contact</Link></li>
+          <li><Link to="/login">Login</Link></li>
         </ul>
       </div>
     </nav>
