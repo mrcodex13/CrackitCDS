@@ -1,0 +1,94 @@
+.subject-header {
+    margin-top: 120px;
+
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    padding: 5px 20px;
+    min-height: 100px;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 28px;
+
+    overflow-x: auto;
+}
+
+/* Back Button */
+.back-btn {
+    flex-shrink: 0;
+
+    padding: 14px 24px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.06);
+
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+/* Subject Name */
+.subject-title {
+    flex-shrink: 0;
+}
+
+.subject-title h1 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Description */
+.subject-description {
+    flex: 1;
+
+    color: rgba(255,255,255,0.75);
+
+    font-size: 1rem;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Stats */
+.subject-stat-card {
+    flex-shrink: 0;
+
+    min-width: 140px;
+
+    padding: 0px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 40px;
+
+    background: rgba(255,255,255,0.05);
+    font-weight: 400;
+}
+
+.stat-value {
+    color: white;
+
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.stat-label {
+    color: rgba(255,255,255,0.7);
+
+    font-size: 0.9rem;
+}

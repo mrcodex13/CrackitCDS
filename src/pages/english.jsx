@@ -1,13 +1,17 @@
-
+import { useState } from "react";
 import Navbar from "../components/layout/Navbar/Navbar";
-import FullScreenBtn from "../components/layout/FullScreenBtn/FullScreenBtn";
+import "./english.css";
+import SubjectHeader from "../components/subjectPage/SubjectHeader/SubjectHeader";
 
-function English(){
-    return (
-        <>
-            <Navbar />
-        </>
-    );
 
+function English() {
+
+  return (
+    <>
+     <Navbar /> 
+     <SubjectHeader />
+    </>
+  );
 }
-export default English ;
+
+export default English;

@@ -6,8 +6,8 @@ function About() {
         <>
             <Navbar />
             <div className="bento-item fullscreen-area">
-            <FullScreenBtn/>
             </div>
+           
         </>
     );
 }
