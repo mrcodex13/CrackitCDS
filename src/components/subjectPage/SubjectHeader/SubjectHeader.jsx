@@ -1,38 +1,46 @@
 import "./SubjectHeader.css";
+import { useNavigate } from "react-router-dom";
 
 function SubjectHeader({
-  subjectName = "English",
-  totalChapters = 10,
-  completedChapters = 0,
-  progress = 0,
+ subjectName,
+  totalChapters,
+  completedChapters,
+  progress,
 }) {
+  const navigate = useNavigate();
+
   return (
     <div className="subject-header">
-    <button className="back-btn">← Back</button>
+      <button
+        className="back-btn"
+        onClick={() => navigate(-1)}
+      >
+        ← Back
+      </button>
 
-    <div className="subject-title">
-        <h1>English</h1>
-    </div>
+      <div className="subject-title">
+        <h1>{subjectName}</h1>
+      </div>
 
-    <div className="subject-description">
+      <div className="subject-description">
         Master the subject one chapter at a time.
-    </div>
+      </div>
 
-    <div className="subject-stat-card">
-        <span className="stat-value">10</span>
+      <div className="subject-stat-card">
+        <span className="stat-value">{totalChapters}</span>
         <span className="stat-label">Chapters</span>
-    </div>
+      </div>
 
-    <div className="subject-stat-card">
-        <span className="stat-value">0</span>
+      <div className="subject-stat-card">
+        <span className="stat-value">{completedChapters}</span>
         <span className="stat-label">Completed</span>
-    </div>
+      </div>
 
-    <div className="subject-stat-card">
-        <span className="stat-value">0%</span>
+      <div className="subject-stat-card">
+        <span className="stat-value">{progress}%</span>
         <span className="stat-label">Progress</span>
+      </div>
     </div>
-</div>
   );
 }
 
