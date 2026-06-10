@@ -1,4 +1,14 @@
+
+import Navbar from "../components/layout/Navbar/Navbar";
+
 function English(){
-    return <h1>English</h1>
+    return (
+        <>
+            <Navbar />
+            <div style={{ paddingTop: '100px', padding: '2rem' }}>
+            </div>
+        </>
+    );
+
 }
 export default English ;

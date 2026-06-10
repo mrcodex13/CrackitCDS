@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navigate, Route, useNavigate } from "react-router-dom";
 import './SubjectButtons.css';
 
 /* Subject list — each entry becomes a clickable bubbly card on the dashboard */
@@ -12,6 +13,8 @@ const subjects = [
       </svg>
     ),
     progress: 0,
+    route: "/english" ,
+
   },
   {
     name: "General Knowledge",
@@ -23,6 +26,7 @@ const subjects = [
       </svg>
     ),
     progress: 0,
+    route: "/General_Studies"  ,
   },
   {
     name: "Mathematics",
@@ -34,10 +38,12 @@ const subjects = [
       </svg>
     ),
     progress: 0,
+    route:"/mathematics",
   },
 ];
 
 function SubjectButtons() {
+  const navigate = useNavigate()
   return (
     <div className="subject-container">
       {subjects.map((subject, index) => (
@@ -45,6 +51,7 @@ function SubjectButtons() {
           key={index}
           className="subject-card glass-card bubbly-btn"
           type="button"
+          onClick={()=> navigate(subject.route)}
         >
           <div className="subject-icon-container">{subject.icon}</div>
 
