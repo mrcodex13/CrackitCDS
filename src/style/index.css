@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Default Dark Theme (Onyx/Slate) */
+  --bg-dark: #121212;
+  --bg-surface: #1e1e1e;
+  --primary: #10b981; /* Emerald */
+  --primary-hover: #059669;
+  --primary-glow: rgba(16, 185, 129, 0.15);
+  --secondary: #94a3b8;
+  --accent: #f59e0b;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --glass: rgba(30, 30, 30, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(20px);
+  --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  /* Card surfaces — used by .glass-card (progress, quotes, checklist, etc.) */
+  --card-bg: rgba(30, 30, 30, 0.45);
+  --card-bg-hover: rgba(30, 30, 30, 0.55);
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-bg-focus: rgba(255, 255, 255, 0.1);
+  --surface-muted: rgba(255, 255, 255, 0.03);
+  --surface-muted-hover: rgba(255, 255, 255, 0.05);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Bubbly button tokens — shared across all interactive buttons */
+  --btn-radius: 20px;
+  --btn-radius-sm: 14px;
+  --btn-radius-pill: 999px;
+  --btn-bounce: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease, filter 0.25s ease;
+  --btn-shadow: 0 4px 14px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --btn-shadow-hover: 0 8px 24px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.light-theme {
+  --bg-dark: #f1f5f9; /* Softer light grey */
+  --bg-surface: #e2e8f0;
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-glow: rgba(5, 150, 105, 0.1);
+  --secondary: #64748b;
+  --accent: #d97706;
+  --text-main: #334155; /* Muted charcoal */
+  --text-muted: #64748b;
+  --glass: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --glass-blur: blur(25px);
+  --card-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-bg-hover: rgba(255, 255, 255, 1);
+  --input-bg: rgba(15, 23, 42, 0.04);
+  --input-bg-focus: rgba(15, 23, 42, 0.06);
+  --surface-muted: rgba(15, 23, 42, 0.04);
+  --surface-muted-hover: rgba(15, 23, 42, 0.07);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(160, 84%, 39%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(160, 84%, 39%, 0.1) 0px, transparent 50%);
+  color: var(--text-main);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Shared card shell — must use theme tokens so light/dark both look correct */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: var(--card-bg-hover);
+}
+
+/* Non-button cards stay static; bubbly buttons keep their bounce */
+.glass-card:not(.bubbly-btn):hover {
+  box-shadow: none;
+}
+
+/* Base reset for all <button> elements */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* ============================================================
+   BUBBLY BUTTON SYSTEM
+   Add class "bubbly-btn" to any button for the soft rounded look.
+   Modifiers:
+     bubbly-btn--round  → circular icon buttons
+     bubbly-btn--pill   → wide pill-shaped buttons (Add, Send, etc.)
+   ============================================================ */
+.bubbly-btn {
+  border-radius: var(--btn-radius);
+  box-shadow: var(--btn-shadow);
+  transition: var(--btn-bounce);
+  border: 1px solid var(--glass-border);
+  /* Keep hover glow inside the layout — no scale/translate */
+  transform: none;
+  will-change: box-shadow, border-color;
+}
+
+/* Button cards must not clip their own shadow on hover */
+.glass-card.bubbly-btn {
+  overflow: visible;
+}
+
+.bubbly-btn:hover {
+  box-shadow: var(--btn-shadow-hover);
+  border-color: rgba(16, 185, 129, 0.35);
+  filter: brightness(1.04);
+  z-index: 1;
+}
+
+.bubbly-btn:active {
+  filter: brightness(0.97);
+  box-shadow: var(--btn-shadow);
+  transition-duration: 0.1s;
+}
+
+.bubbly-btn--round {
+  border-radius: 50%;
+}
+
+.bubbly-btn--pill {
+  border-radius: var(--btn-radius-pill);
+}

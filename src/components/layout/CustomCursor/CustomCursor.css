@@ -1,0 +1,143 @@
+/* ============================================================
+   CUSTOM CURSOR — emerald glow matching app theme
+   Active only on desktop (see CustomCursor.jsx).
+   Colors use CSS variables so light/dark theme auto-syncs.
+   ============================================================ */
+
+body.custom-cursor-active,
+body.custom-cursor-active button,
+body.custom-cursor-active a,
+body.custom-cursor-active input,
+body.custom-cursor-active textarea,
+body.custom-cursor-active select,
+body.custom-cursor-active label {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: normal;
+}
+
+.custom-cursor--hidden {
+  opacity: 0;
+}
+
+/* Soft ambient glow behind the cursor */
+.cursor-glow {
+  position: fixed;
+  width: 120px;
+  height: 120px;
+  margin-left: -60px;
+  margin-top: -60px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--primary-glow) 0%,
+    transparent 70%
+  );
+  opacity: 0.55;
+  transition: opacity 0.3s ease, width 0.35s ease, height 0.35s ease, margin 0.35s ease;
+  will-change: transform;
+}
+
+/* Outer ring — follows with smooth lag */
+.cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
+  margin-top: -18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--primary);
+  opacity: 0.65;
+  transition: width 0.35s cubic-bezier(0.34, 1.2, 0.64, 1),
+              height 0.35s cubic-bezier(0.34, 1.2, 0.64, 1),
+              margin 0.35s cubic-bezier(0.34, 1.2, 0.64, 1),
+              opacity 0.25s ease,
+              border-color 0.25s ease;
+  will-change: transform;
+}
+
+/* Inner dot — snaps to real cursor position */
+.cursor-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary-glow);
+  will-change: transform;
+}
+
+/* Fading trail specks */
+.cursor-trail {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Hovering over buttons / links — ring expands */
+.custom-cursor--hover .cursor-ring {
+  width: 52px;
+  height: 52px;
+  margin-left: -26px;
+  margin-top: -26px;
+  opacity: 0.9;
+  border-width: 2px;
+  border-color: var(--primary);
+  box-shadow: 0 0 18px var(--primary-glow), inset 0 0 12px var(--primary-glow);
+}
+
+.custom-cursor--hover .cursor-glow {
+  width: 160px;
+  height: 160px;
+  margin-left: -80px;
+  margin-top: -80px;
+  opacity: 0.75;
+}
+
+.custom-cursor--hover .cursor-dot {
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+}
+
+/* Click pulse */
+.custom-cursor--click .cursor-ring {
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  opacity: 1;
+}
+
+.custom-cursor--click .cursor-dot {
+  transform: scale(1.6);
+}
+
+/* Light theme — slightly softer glow so it doesn't overpower */
+.light-theme .cursor-glow {
+  opacity: 0.4;
+}
+
+.light-theme .cursor-ring {
+  opacity: 0.55;
+}
+
+.light-theme .custom-cursor--hover .cursor-glow {
+  opacity: 0.55;
+}

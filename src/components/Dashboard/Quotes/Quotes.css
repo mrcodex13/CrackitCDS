@@ -1,0 +1,55 @@
+.quotes-card {
+  height: auto;
+  min-height: unset;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  justify-content: center;
+  position: relative;
+}
+
+.quote-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.quote-text-main {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+  padding-right: 2rem;
+}
+
+/* Shuffle quote button — extends global .bubbly-btn--round */
+.quote-refresh {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  width: 34px;
+  height: 34px;
+  background: var(--glass-border);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-refresh:hover {
+  background: var(--primary-glow);
+  color: var(--primary);
+}
+
+@media (min-width: 1025px) {
+  .quotes-card {
+    height: 100%;
+    justify-content: space-between;
+  }
+}

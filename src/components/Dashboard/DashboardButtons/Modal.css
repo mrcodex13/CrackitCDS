@@ -1,0 +1,246 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 6, 23, 0.82);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  width: 95%;
+  max-width: 500px;
+  max-height: 85vh;
+  padding: 2.5rem;
+  background: var(--bg-dark);
+  border: 1px solid var(--glass-border);
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  color: var(--primary);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Modal close (X) — extends global .bubbly-btn--round */
+.close-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+}
+
+.close-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Modal Content Styles */
+.analysis-report {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.test-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  transition: var(--transition);
+}
+
+.test-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--primary-glow);
+}
+
+.test-score {
+  font-weight: 800;
+  color: var(--primary);
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+
+/* Streak Premium Styles */
+.streak-info {
+    text-align: center;
+}
+
+.streak-number {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(244, 114, 182, 0.3);
+}
+
+.streak-sub {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.streak-history {
+    margin-top: 3rem;
+    text-align: left;
+}
+
+.streak-history h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.hint-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.day-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.day-item-container {
+    width: 100%;
+}
+
+/* Streak day row — extends global .bubbly-btn */
+.day-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-main);
+    border-radius: var(--btn-radius);
+}
+
+.day-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-glow);
+}
+
+.day-item.active {
+    background: var(--primary-glow);
+    border-color: var(--primary);
+}
+
+.day-label {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.date-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.hours-reveal {
+    background: rgba(56, 189, 248, 0.1);
+    margin-top: -8px;
+    padding: 1.5rem 1rem 1rem 1rem;
+    border-radius: 0 0 12px 12px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-top: none;
+    z-index: -1;
+    position: relative;
+}
+
+/* ChatBot Styles */
+.chatbot-interface {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 350px;
+}
+
+.chat-bubble {
+    padding: 1rem 1.25rem;
+    border-radius: 18px;
+    max-width: 85%;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.chat-bubble.bot {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-input-area {
+    margin-top: auto;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.chat-input-area input {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    padding: 1rem 1.25rem;
+    border-radius: var(--btn-radius-pill);
+    color: white;
+    outline: none;
+    transition: var(--btn-bounce);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.chat-input-area input:focus {
+    border-color: var(--primary);
+}
+
+/* Chat "Send" button — extends global .bubbly-btn--pill */
+.primary-btn {
+    background: var(--primary);
+    color: var(--bg-dark);
+    padding: 0.85rem 1.75rem;
+    font-weight: 800;
+}
+
+.primary-btn:hover {
+    background: var(--primary-hover);
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-scale {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
