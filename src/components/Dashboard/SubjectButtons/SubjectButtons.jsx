@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, useNavigate } from "react-router-dom";
 import './SubjectButtons.css';
 
+
 /* Subject list — each entry becomes a clickable bubbly card on the dashboard */
 const subjects = [
   {
