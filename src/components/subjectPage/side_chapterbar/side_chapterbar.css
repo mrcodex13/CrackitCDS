@@ -1,40 +1,41 @@
 .chapter-sidebar {
     width: 350px;
     margin-top: 24px;
+    margin-left: 70px;
     padding: 24px;
 
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    margin-left: 50px;
-    max-height: 400px;
+
+    max-height: 335px ;
     overflow-y: auto;
 
-    scrollbar-width: none;      /* Firefox */
+    scrollbar-width: none;
     -ms-overflow-style: none;
 
+    transition: all 0.3s ease;
 }
 
 .chapter-sidebar::-webkit-scrollbar {
-    display: none;              /* Chrome/Safari */
+    display: none;
 }
 
 .chapter-sidebar h3 {
     margin: 0 0 20px;
 
     color: white;
-
     font-size: 1.2rem;
-    border-left: 50px;
+
     height: fit-content;
+
+    transition: all 0.3s ease;
 }
 
 .chapter-list {
     display: flex;
-
     flex-direction: column;
-
     gap: 12px;
 
     scrollbar-width: none;
@@ -42,24 +43,19 @@
 }
 
 .chapter-list::-webkit-scrollbar {
-    display: none;              /* Chrome, Safari */
+    display: none;
 }
-
-
 
 .chapter-item {
     width: 100%;
 
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
 
     padding: 14px 16px;
 
     border: none;
-
     border-radius: 16px;
 
     background: rgba(255, 255, 255, 0.05);
@@ -70,8 +66,6 @@
 
     transition: all 0.3s ease;
 }
-
-
 
 .chapter-item:hover {
     background: rgba(255, 255, 255, 0.10);
@@ -86,4 +80,30 @@
 .chapter-status {
     color: var(--primary);
     font-weight: 700;
+}
+
+/* ========================= */
+/* Fullscreen Focus Mode */
+/* ========================= */
+
+body.fullscreen-mode .chapter-sidebar {
+    width: 400px;
+    margin-left: 90px;
+
+    padding: 28px;
+
+    max-height: 450px;
+}
+
+body.fullscreen-mode .chapter-sidebar h3 {
+    font-size: 1.3rem;
+}
+
+body.fullscreen-mode .chapter-list {
+    gap: 14px;
+}
+
+body.fullscreen-mode .chapter-item {
+    padding: 16px 18px;
+    font-size: 1rem;
 }

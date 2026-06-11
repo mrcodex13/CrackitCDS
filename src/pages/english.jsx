@@ -5,6 +5,7 @@ import SubjectHeader from "../components/subjectPage/SubjectHeader/SubjectHeader
 import SearchBar from "../components/subjectPage/SearchBar/SearchBar";
 import SideChapterBar from "../components/subjectPage/side_chapterbar/side_chapterbar";
 import PreviewTopic from "../components/subjectPage/previewTopic/previewTopic";
+import FullScreenBtn from "../components/layout/FullScreenBtn/FullScreenBtn";
 
 function English() {
 
@@ -22,6 +23,7 @@ function English() {
         <SideChapterBar />
         <PreviewTopic />
     </div>
+    <FullScreenBtn />
     </>
   );
 }

@@ -1,25 +1,42 @@
-/* Circular fullscreen toggle — extends global .bubbly-btn--round */
+/* Circular fullscreen toggle */
 .fullscreen-btn {
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-main);
-  background: var(--glass);
-  cursor: pointer;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-main);
+    background: var(--glass);
+
+    cursor: pointer;
+
+    z-index: 9999;
+
+    transition: all 0.3s ease;
 }
 
 .fullscreen-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--primary);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(0, 255, 170, 0.25);
 }
 
 .fullscreen-btn svg {
-  transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
 .fullscreen-btn.active {
-  color: var(--primary);
-  background: var(--primary-glow);
+    color: var(--primary);
+    background: var(--primary-glow);
+
+    box-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
 }

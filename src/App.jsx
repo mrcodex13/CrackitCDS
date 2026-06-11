@@ -12,7 +12,6 @@ function App() {
     <>
       {/* Global emerald glow cursor — desktop only */}
       <CustomCursor />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/english" element={<English />} />

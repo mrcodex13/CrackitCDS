@@ -15,9 +15,25 @@ function PreviewTopic() {
                 and track your learning progress.
             </p>
 
-            <button className="preview-btn">
-                Start Learning
-            </button>
+            <div className="preview-topics">
+                <h3>Topics Covered</h3>
+
+                <ul>
+                    <li>Topic 1</li>
+                    <li>Topic 2</li>
+                    <li>Topic 3</li>
+                </ul>
+            </div>
+
+            <div className="preview-footer">
+                <span className="preview-duration">
+                    ⏱ Estimated Time: 30 mins
+                </span>
+
+                <button className="preview-btn">
+                    Start Learning
+                </button>
+            </div>
         </div>
     );
 }

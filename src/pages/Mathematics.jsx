@@ -20,8 +20,10 @@ function Mathematics() {
                 progress={50}
             />
       <div>
-      <SearchBar />
-      {/* <StatsCards /> */}
+      <div className="searchBar-StatsCards">
+        <SearchBar />
+        <StatsCards />
+      </div>
       </div>
       <div className="content-layout">
         <SideChapterBar />
