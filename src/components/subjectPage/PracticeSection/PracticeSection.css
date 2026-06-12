@@ -1,0 +1,51 @@
+/* PracticeSection — theme-aware */
+.practice-section {
+    margin: 24px 70px 0;
+    padding: 28px 32px;
+    border-radius: 24px;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    transition: var(--transition);
+}
+
+.practice-section h2 {
+    color: var(--text-main);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    transition: var(--transition);
+}
+
+.practice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.practice-card {
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    background: var(--surface-muted);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    text-align: left;
+}
+
+.practice-card:hover {
+    background: var(--primary-glow);
+    border-color: rgba(16, 185, 129, 0.35);
+    color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+}
+
+body.fullscreen-mode .practice-section {
+    margin-left: 90px;
+    margin-right: 90px;
+    padding: 36px 40px;
+}

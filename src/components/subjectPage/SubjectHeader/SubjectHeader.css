@@ -2,49 +2,47 @@
     /* Centering and Alignment */
     width: calc(100% - 4rem);
     max-width: 1400px;
-    margin: 120px auto 0 auto; /* 120px top, auto sides for centering */
-    
+    margin: 120px auto 0 auto;
+
     /* Layout */
     display: flex;
     align-items: center;
     gap: 50px;
-    
-    /* Padding - matching navbar's 2.5rem side padding */
+
+    /* Padding */
     padding: 5px 2.5rem;
     min-height: 100px;
     box-sizing: border-box;
 
-    /* Styling */
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.12);
+    /* Styling — theme-aware */
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
     border-radius: 28px;
     overflow-x: auto;
+    transition: var(--transition);
 }
 
 /* Back Button */
 .back-btn {
     flex-shrink: 0;
-
     padding: 14px 24px;
-
-    border: none;
+    border: 1px solid var(--glass-border);
     border-radius: 16px;
-
-    background: rgba(255,255,255,0.06);
-
-    color: white;
+    background: var(--surface-muted);
+    color: var(--text-main);
     font-size: 16px;
     font-weight: 600;
-
     cursor: pointer;
+    transition: var(--transition);
 }
-.back-btn:hover{
-    background: rgba(255, 255, 255, 0.1);
+
+.back-btn:hover {
+    background: var(--primary-glow);
     color: var(--primary);
-
-    box-shadow: 0 8px 20px rgba(0, 255, 170, 0.25);
-
+    border-color: rgba(16, 185, 129, 0.35);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
     transform: translateY(-2px);
 }
 
@@ -55,9 +53,7 @@
 
 .subject-title h1 {
     margin: 0;
-
-    color: white;
-
+    color: var(--text-main);
     font-size: 2rem;
     font-weight: 700;
 }
@@ -65,11 +61,8 @@
 /* Description */
 .subject-description {
     flex: 1;
-
-    color: rgba(255,255,255,0.75);
-
+    color: var(--text-muted);
     font-size: 1rem;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -78,30 +71,24 @@
 /* Stats */
 .subject-stat-card {
     flex-shrink: 0;
-
     min-width: 140px;
-
     padding: 0px 20px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     border-radius: 40px;
-
-    background: rgba(255,255,255,0.05);
+    background: var(--surface-muted);
+    border: 1px solid var(--glass-border);
     font-weight: 400;
 }
 
 .stat-value {
-    color: white;
-
+    color: var(--text-main);
     font-size: 2rem;
     font-weight: 700;
 }
 
 .stat-label {
-    color: rgba(255,255,255,0.7);
-
+    color: var(--text-muted);
     font-size: 0.9rem;
 }

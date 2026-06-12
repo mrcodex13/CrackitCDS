@@ -1,0 +1,361 @@
+================================================================================
+  CrackItCDS — FEATURE ROADMAP & TECHNICAL IMPLEMENTATION GUIDE
+  Last updated: June 2026
+  Author: Development Notes (Karti + AI Assistant)
+================================================================================
+
+This document describes every planned feature, its current state, and exactly
+how it will be implemented when we move from static frontend to a fully working
+product. Keep this file updated as features are built.
+
+================================================================================
+  TABLE OF CONTENTS
+================================================================================
+  1. PreviewTopic Tab System (Overview / Notes / Videos / PYQ)
+  2. Floating AI Chatbot (Subject-Aware Study Assistant)
+  3. Chapter Selection & State Management
+  4. Fullscreen Mode
+  5. Theme (Dark / Light) System
+  6. Dashboard Features
+  7. Authentication & User Profiles
+  8. Backend Architecture Overview
+
+================================================================================
+  1. PREVIEWTOPIC TAB SYSTEM
+================================================================================
+
+FILE:  src/components/subjectPage/previewTopic/previewTopic.jsx
+FILE:  src/components/subjectPage/previewTopic/previewTopic.css
+
+-- CURRENT STATE (Frontend-only) --
+  The PreviewTopic panel has 4 tabs:
+    [Overview]  → Shows chapter description, topics covered, estimated time.
+    [Notes]     → Static placeholder cards (Coming Soon badge).
+    [Videos]    → Static placeholder video cards (Coming Soon badge).
+    [PYQ]       → Static placeholder PYQ question rows (Coming Soon badge).
+
+  Tab switching is handled by local React state (activeTab).
+  All content is hardcoded in previewTopic.jsx.
+
+-- HOW TO MAKE IT WORK (Future) --
+
+  STEP 1 — DATABASE SCHEMA
+  ─────────────────────────
+  Create the following tables (or Firestore collections):
+
+    chapters(id, subject_id, title, description, topics[], estimated_time, order, completed)
+    notes(id, chapter_id, title, content_markdown, type: [summary|concepts|formula|mnemonic])
+    videos(id, chapter_id, title, youtube_url, duration_seconds, thumbnail_url)
+    pyqs(id, chapter_id, year, question_text, options[], correct_option, explanation)
+
+  STEP 2 — API ENDPOINTS
+  ───────────────────────
+    GET /api/chapters/:subject          → list of chapters for a subject
+    GET /api/chapters/:id/notes         → all notes for a chapter
+    GET /api/chapters/:id/videos        → all videos for a chapter
+    GET /api/chapters/:id/pyqs          → all PYQs for a chapter
+
+  STEP 3 — FRONTEND CHANGES
+  ──────────────────────────
+  In previewTopic.jsx:
+    - Replace static placeholder arrays with useEffect + fetch calls
+    - Call the appropriate endpoint when activeTab changes
+    - Show a loading skeleton while data is fetching
+    - Cache results in parent state to avoid re-fetching on tab switch
+
+  Example:
+    useEffect(() => {
+      if (activeTab === 'notes' && !notesData) {
+        fetch(`/api/chapters/${chapter.id}/notes`)
+          .then(r => r.json())
+          .then(setNotesData);
+      }
+    }, [activeTab, chapter.id]);
+
+  STEP 4 — NOTES TAB
+  ───────────────────
+  - Render Markdown content using react-markdown or marked.js
+  - Allow users to highlight text and save personal annotations
+  - Add a download PDF button (use jsPDF or browser print API)
+
+  STEP 5 — VIDEOS TAB
+  ────────────────────
+  - Embed YouTube/Vimeo player using react-player
+  - Track watch progress per video per user (store in DB)
+  - Mark video as "Watched" when >80% completed
+  - Show progress bar on each video card
+
+  STEP 6 — PYQ TAB
+  ─────────────────
+  - Render full question with MCQ options (A/B/C/D)
+  - On option select: reveal correct answer + explanation
+  - Track attempt history per user (correct/incorrect/skipped)
+  - Add filters: by year, by difficulty, by attempted status
+  - Show accuracy stat (e.g., "You got 3/5 correct in 2023")
+
+  STEP 7 — OVERVIEW TAB
+  ──────────────────────
+  - "Start Learning" button → navigates to a full Chapter Detail page
+  - Chapter Detail page shows all notes, embedded video, and a mini quiz
+  - Mark chapter as complete when user finishes the mini quiz with ≥70%
+
+================================================================================
+  2. FLOATING AI CHATBOT
+================================================================================
+
+FILE:  src/components/subjectPage/FloatingChatButton/FloatingChatButton.jsx
+FILE:  src/components/subjectPage/FloatingChatButton/FloatingChatButton.jsx.css
+
+-- CURRENT STATE (Static) --
+  The chatbot has:
+    - A floating 🤖 button fixed bottom-right of every subject page
+    - Click → a chat panel slides up (CSS transform animation)
+    - Context pill showing which chapter you're chatting about
+    - Keyword-matching static responses (BOT_RESPONSES array)
+    - Typing indicator animation (3 bouncing dots)
+    - Chat history in component state (resets on page refresh)
+    - Enter key support + disabled send button when input is empty
+
+  The ONLY function that needs to change for full AI is getBotReply():
+    CURRENT:  getBotReply(input)  →  keyword match → static string
+    FUTURE:   getBotReply(input)  →  API call to LLM → streamed response
+
+-- HOW TO MAKE IT AGENTIC (Future) --
+
+  PHASE 1 — Basic LLM Integration
+  ─────────────────────────────────
+  Replace getBotReply() with an async API call:
+
+    async function getBotReply(userMessage, chapterContext) {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMessage,
+          chapter: chapterContext,   // title, description, topics
+          subject: currentSubject,
+          history: conversationHistory
+        })
+      });
+      const { reply } = await response.json();
+      return reply;
+    }
+
+  Backend endpoint (/api/chat):
+    - Use OpenAI GPT-4o or Gemini Flash as the LLM
+    - System prompt:
+        "You are a CDS exam preparation assistant. The student is currently
+         studying the chapter '{chapter.title}' in {subject}. The topics
+         covered are: {chapter.topics.join(', ')}. Answer concisely and
+         practically. If asked about something unrelated to the chapter,
+         gently redirect."
+    - Pass conversation history for multi-turn context
+    - Return { reply: string }
+
+  PHASE 2 — Streaming Responses
+  ──────────────────────────────
+  - Switch to SSE (Server-Sent Events) or WebSocket for streaming
+  - Show the bot response word-by-word as it's generated
+  - Remove fixed typing delay — use real stream events instead
+  - Add a "Stop generating" button
+
+  PHASE 3 — Agentic Tools
+  ────────────────────────
+  Give the LLM access to "tools" it can call:
+    Tool 1: search_pyqs(chapter_id, keyword)
+            → searches PYQ database, returns matching questions
+            → Bot can say "Here are 3 PYQs on this topic:" + show them
+
+    Tool 2: get_formula_sheet(chapter_id)
+            → fetches formula sheet from DB
+            → Bot can paste formula directly in chat
+
+    Tool 3: create_quiz(chapter_id, num_questions)
+            → generates a mini-quiz on the current chapter
+            → Bot leads the user through Q&A in the chat window
+
+    Tool 4: track_progress(user_id, chapter_id, action)
+            → marks a chapter as started/completed
+            → Bot can say "Great! I've marked this chapter as started."
+
+  PHASE 4 — Persistent Memory
+  ─────────────────────────────
+  - Save conversation history to DB per user per chapter
+  - When user returns, load their last 10 messages as context
+  - Add "Clear chat" button to reset session
+  - Weekly summary: bot sends a recap of topics studied
+
+  PHASE 5 — Voice Mode
+  ─────────────────────
+  - Add microphone button next to text input
+  - Use Web Speech API (SpeechRecognition) for voice-to-text
+  - Optional: text-to-speech for bot responses (SpeechSynthesis API)
+
+  IMPLEMENTATION NOTE:
+  The component is already designed for this upgrade. In FloatingChatButton.jsx:
+  - sendMessage() calls getBotReply() and awaits it
+  - Just make getBotReply() async and replace the body with a fetch call
+  - No structural change to the component is needed
+
+================================================================================
+  3. CHAPTER SELECTION & STATE MANAGEMENT
+================================================================================
+
+FILE:  src/data/chaptersData.js
+FILES: src/pages/english.jsx, GK.jsx, Mathematics.jsx
+
+-- CURRENT STATE --
+  - Chapter data is hardcoded in src/data/chaptersData.js
+  - selectedChapter state lives in each subject page
+  - Passed as props: chapters → SideChapterBar, chapter → PreviewTopic
+  - completed/progress stats are computed client-side from the data
+
+-- HOW TO MAKE IT DYNAMIC (Future) --
+
+  STEP 1 — Fetch chapters from API on page load
+    useEffect(() => {
+      fetch(`/api/chapters/${subjectId}`)
+        .then(r => r.json())
+        .then(setChapters);
+    }, [subjectId]);
+
+  STEP 2 — Persist user progress to backend
+  - When user clicks "Start Learning" or "Revise": POST /api/progress
+  - Track: user_id, chapter_id, status (not_started | in_progress | completed)
+  - Fetch progress on load and merge with chapter data
+
+  STEP 3 — Real-time search
+  - SearchBar currently has no handler
+  - Add onChange → filter chapters array by title/topic
+  - Debounce input by 300ms before filtering
+  - Optionally: hit /api/search?q=... for server-side search
+
+  STEP 4 — Global state (if complexity grows)
+  - Use React Context or Zustand for shared state
+  - Store: { user, chapters, progress, selectedChapter } globally
+  - Avoids prop-drilling when adding more nested components
+
+================================================================================
+  4. FULLSCREEN MODE
+================================================================================
+
+FILE:  src/components/layout/FullScreenBtn/FullScreenBtn.jsx
+
+-- CURRENT STATE --
+  - Uses native browser Fullscreen API (requestFullscreen)
+  - Listens to fullscreenchange event
+  - Adds/removes 'fullscreen-mode' class on document.body
+  - All CSS media adjustments use: body.fullscreen-mode .classname { ... }
+
+-- FUTURE --
+  - Consider storing fullscreen preference in localStorage
+  - On subject pages, fullscreen could hide the Navbar for a focus mode
+  - Add keyboard shortcut: F key or Ctrl+Shift+F to toggle
+
+================================================================================
+  5. THEME SYSTEM
+================================================================================
+
+FILE:  src/style/index.css
+FILE:  src/components/layout/Navbar/Navbar.jsx
+
+-- CURRENT STATE --
+  - Navbar has a sun/moon toggle button
+  - Toggle adds/removes 'light-theme' class on document.body
+  - All CSS variables are defined in :root (dark) and .light-theme (light)
+  - Every component uses var(--token) — never hardcoded colors
+  - Theme resets on page refresh (state is in Navbar component)
+
+-- FUTURE --
+  - Persist theme to localStorage:
+      localStorage.setItem('theme', isLight ? 'light' : 'dark')
+  - On app load, read localStorage and apply class immediately (in main.jsx)
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light') document.body.classList.add('light-theme');
+  - If user is logged in, sync theme preference to their profile in DB
+
+================================================================================
+  6. DASHBOARD FEATURES
+================================================================================
+
+-- Progress Bar --
+  Currently shows static hardcoded mastery percentage.
+  Future: fetch user's actual completion rate across all subjects from DB.
+
+-- Clock --
+  Currently shows countdown to a hardcoded exam date.
+  Future: allow user to set their exam date; store in localStorage or DB.
+
+-- Checklist --
+  Currently stores tasks in React state (resets on refresh).
+  Future: persist to localStorage first, then to DB per user.
+
+-- SubjectButtons --
+  Currently show static progress values.
+  Future: fetch real progress per subject from /api/progress/:userId.
+
+-- DashboardButtons (Analysis/Streak/PlanningBot) --
+  Currently static tiles.
+  Future:
+    Analysis   → Show charts: accuracy by subject, time spent, weak topics
+    Streak     → Track daily login/study streak, store in DB
+    PlanningBot → AI that generates a study schedule based on exam date + weak areas
+
+================================================================================
+  7. AUTHENTICATION & USER PROFILES
+================================================================================
+
+-- PLANNED FLOW --
+  1. Login page: Email/password + Google OAuth
+  2. On login: fetch user profile, chapters progress, checklist, theme preference
+  3. JWT token stored in httpOnly cookie (secure)
+  4. Protected routes: all subject pages require login
+  5. Guest mode: allow browsing with limited features (no progress tracking)
+
+-- TECH STACK RECOMMENDATION --
+  - Auth: Supabase Auth or Firebase Auth (easiest to integrate with React)
+  - DB: Supabase (PostgreSQL) or Firebase Firestore
+  - API: Express.js or Next.js API routes
+  - LLM: OpenAI API or Google Gemini API
+  - Hosting: Vercel (frontend) + Railway/Render (backend)
+
+================================================================================
+  8. BACKEND ARCHITECTURE OVERVIEW
+================================================================================
+
+  ┌─────────────────────────────────────────────────────┐
+  │                    FRONTEND (Vite + React)           │
+  │  Pages: Home, English, GK, Mathematics, About        │
+  │  State: React useState / Context / Zustand           │
+  │  Auth: JWT token from cookie                         │
+  └──────────────────────┬──────────────────────────────┘
+                         │ REST API / WebSocket
+  ┌──────────────────────▼──────────────────────────────┐
+  │                 BACKEND (Express / Next.js)          │
+  │  /api/auth        → login, register, logout          │
+  │  /api/chapters    → list, detail per subject         │
+  │  /api/progress    → read/write user progress         │
+  │  /api/notes       → chapter notes (markdown)         │
+  │  /api/videos      → chapter videos (YouTube URLs)    │
+  │  /api/pyqs        → PYQ questions + answers          │
+  │  /api/chat        → LLM chat endpoint                │
+  │  /api/search      → full-text search across content  │
+  └──────────────────────┬──────────────────────────────┘
+                         │
+  ┌──────────────────────▼──────────────────────────────┐
+  │                    DATABASE                          │
+  │  Supabase / Firebase                                 │
+  │  Tables: users, subjects, chapters, notes,           │
+  │          videos, pyqs, progress, chat_history        │
+  └──────────────────────┬──────────────────────────────┘
+                         │
+  ┌──────────────────────▼──────────────────────────────┐
+  │                  EXTERNAL SERVICES                   │
+  │  OpenAI / Gemini API  → chatbot intelligence         │
+  │  YouTube Data API     → video metadata               │
+  │  Cloudinary / S3      → PDF notes storage            │
+  └─────────────────────────────────────────────────────┘
+
+================================================================================
+  END OF DOCUMENT
+================================================================================

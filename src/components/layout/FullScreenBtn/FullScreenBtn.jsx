@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FullScreenBtn.css';
 
 const FullScreenBtn = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  /* Sync state + body class when fullscreen changes (e.g. Esc key) */
+  useEffect(() => {
+    const handleChange = () => {
+      const active = !!document.fullscreenElement;
+      setIsFullscreen(active);
+      if (active) {
+        document.body.classList.add('fullscreen-mode');
+      } else {
+        document.body.classList.remove('fullscreen-mode');
+      }
+    };
+    document.addEventListener('fullscreenchange', handleChange);
+    return () => document.removeEventListener('fullscreenchange', handleChange);
+  }, []);
 
   /* Toggle browser fullscreen using the Fullscreen API */
   const toggleFullScreen = () => {
@@ -10,10 +25,8 @@ const FullScreenBtn = () => {
       document.documentElement.requestFullscreen().catch((e) => {
         console.error(`Error attempting to enable full-screen mode: ${e.message} (${e.name})`);
       });
-      setIsFullscreen(true);
     } else if (document.exitFullscreen) {
       document.exitFullscreen();
-      setIsFullscreen(false);
     }
   };
 
